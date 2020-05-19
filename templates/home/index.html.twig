@@ -2,20 +2,26 @@
 
 {% block main %}
     {% for book in paginator.results %}
-        <article class="post">
+        <a href="{{ path('detailed_book', {id: book.id}) }}">
+        <article class="col-md-4 book">
             <h2>
-                <a href="{{ path('detailed_book', {id: book.id}) }}">
-                    {{ book.name }}
-                </a>
+                    {{ book.name | capitalize }}
             </h2>
 
-            <p class="post-metadata">
-                {# <span class="metadata"><i class="fa fa-calendar"></i> {{ post.publishedAt|localizeddate('long', 'medium', null, 'UTC') }}</span> #}
-                {# <span class="metadata"><i class="fa fa-user"></i> {{ post.author.fullName }}</span> #}
+            <p>{{ book.description }}</p>
+
+            <p class="book-metadata">
+                <span class="metadata"><i class="fa fa-user"></i> {{ book.type }}</span>
+            </p>
+            <p class="book-metadata">
+                <span class="metadata"><i class="fa fa-user"></i> {{ book.author }}</span>
+            </p>
+            <p class="book-metadata">
+                <span class="metadata"><i class="fa fa-coins"></i>{{ book.price | format_currency('LKR', {decimal_always_shown: true}) }}</span>
             </p>
 
-            <p>{{ book.description }}</p>
         </article>
+        </a>
     {% else %}
         <div class="well">No books found yet! Please add books to the database :)</div>
     {% endfor %}

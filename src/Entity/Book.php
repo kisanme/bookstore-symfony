@@ -129,9 +129,12 @@ class Book
         return $this;
     }
 
-    public function getType(): ?int
+    public function getType(): ?string
     {
-        return $this->type;
+        if ($this->type == 1) {
+            return "Fiction";
+        } 
+        return "Children";
     }
 
     public function setType(int $type): self
