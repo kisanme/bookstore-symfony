@@ -1,3 +1,6 @@
 index:
    path: /
    controller: App\Controller\HomeController::index
+detailed_book:
+    path: /book/{id}
+    controller: App\Controller\HomeController::detailedBook

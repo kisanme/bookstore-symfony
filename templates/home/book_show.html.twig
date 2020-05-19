@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id 'blog_post_show' %}
+
+{% block main %}
+    <h1>{{ book.name }}</h1>
+
+    <p class="post-metadata">
+        <span class="metadata"><i class="fa fa-user"></i> {{ book.author }}</span>
+    </p>
+
+    {{ book.description }}
+
+{% endblock %}
