@@ -20,15 +20,6 @@
                             <a class="navbar-brand" href="{{ path('index') }}">
                                 Nasik's BookStore
                             </a>
-
-                            <button type="button" class="navbar-toggle"
-                                    data-toggle="collapse"
-                                    data-target=".navbar-collapse">
-                                <span class="sr-only">{{ 'menu.toggle_nav'|trans }}</span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                                <span class="icon-bar"></span>
-                            </button>
                         </div>
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
@@ -78,9 +69,8 @@
 
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="locales">
-                                        <i class="fa fa-globe" aria-hidden="true"></i>
-                                        <span class="caret"></span>
-                                        <span class="sr-only">{{ 'menu.choose_language'|trans }}</span>
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        <span>Cart</span>
                                     </a>
                                 </li>
                             </ul>
@@ -93,7 +83,7 @@
         <div class="container body-container">
             {% block body %}
                 <div class="row">
-                    <div id="main" class="col-sm-9">
+                    <div id="main col-md-12">
                         {% block main %}{% endblock %}
                     </div>
                 </div>
@@ -106,7 +96,6 @@
                     <div class="row">
                         <div id="footer-copyright" class="col-md-6">
                             <p>&copy; {{ 'now'|date('Y') }} - The Symfony Project</p>
-                            <p>{{ 'mit_license'|trans }}</p>
                         </div>
                         <div id="footer-resources" class="col-md-6">
                             <p>

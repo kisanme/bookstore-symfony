@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block main %}
+    <div class="container">
     {% for book in paginator.results %}
-        <a href="{{ path('detailed_book', {id: book.id}) }}">
-        <article class="col-md-4 book">
-            <h2>
+        <article class="col-md-3 book">
+            <a href="{{ path('detailed_book', {id: book.id}) }}">
+                <h3 class="book-name">
                     {{ book.name | capitalize }}
-            </h2>
-
-            <p>{{ book.description }}</p>
+                </h3>
+            </a>
 
             <p class="book-metadata">
-                <span class="metadata"><i class="fa fa-user"></i> {{ book.type }}</span>
+                <span class="metadata"><i class="fa fa-book-open"></i> {{ book.type }}</span>
             </p>
             <p class="book-metadata">
                 <span class="metadata"><i class="fa fa-user"></i> {{ book.author }}</span>
@@ -19,12 +19,14 @@
             <p class="book-metadata">
                 <span class="metadata"><i class="fa fa-coins"></i>{{ book.price | format_currency('LKR', {decimal_always_shown: true}) }}</span>
             </p>
-
+            <div>
+                <button class="btn btn-primary"><i class="fa fa-cart-plus"></i>Add to Cart</button>
+            </div>
         </article>
-        </a>
     {% else %}
         <div class="well">No books found yet! Please add books to the database :)</div>
     {% endfor %}
+    </div>
 
     {% if paginator.hasToPaginate %}
         <div class="navigation text-center">
