@@ -12,7 +12,6 @@ Encore
     .cleanupOutputBeforeBuild()
     .autoProvidejQuery()
     .autoProvideVariables({
-        "jQuery.tagsinput": "bootstrap-tagsinput"
     })
     .enableSassLoader()
     // when versioning is enabled, each filename will include a hash that changes
