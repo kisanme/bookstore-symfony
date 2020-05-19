@@ -3,12 +3,24 @@
 {% block body_id 'blog_post_show' %}
 
 {% block main %}
-    <h1>{{ book.name }}</h1>
-
-    <p class="post-metadata">
-        <span class="metadata"><i class="fa fa-user"></i> {{ book.author }}</span>
-    </p>
-
-    {{ book.description }}
+    <div class='col-md-4'>
+        Image goes here
+    </div>
+    <div class='col-md-8'>
+        <h1>{{ book.name }}</h1>
+        <p class="book-metadata">
+            {{ book.description }}
+        </p>
+        <p class="book-metadata">
+            <span class="metadata"><i class="fa fa-user"></i> {{ book.author }}</span>
+        </p>
+        <p class="book-metadata">
+            <span class="metadata"><i class="fa fa-language"></i> {{ book.language }}</span>
+        </p>
+        <p class="book-metadata">
+            <span class="metadata"><i class="fa fa-coins"></i> {{ book.price }}</span>
+        </p>
+        <button class='btn btn-primary'><i class='fa fa-cart-plus'></i> Add to cart</button>
+    </div>
 
 {% endblock %}
