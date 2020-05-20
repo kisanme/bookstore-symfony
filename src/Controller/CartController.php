@@ -24,6 +24,9 @@ class CartController extends AbstractController
      */
     public function addToCart(Book $book)
     {
+        // TODO - If the current invoice payment status is null, add to cart adds to the same invoice
+        // TODO - If the current invoice isn't there / Payment status is true, add a new invoice
+        
         return new Response(print_r($book, true));
     }
 }
