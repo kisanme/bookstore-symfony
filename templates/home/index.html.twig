@@ -12,9 +12,9 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    <li><a href="/">All</a></li>
-                    <li><a href="/?category=0">Children</a></li>
-                    <li><a href="/?category=1">Fiction</a></li>
+                    <li><a href="{{ path('index') }}">All</a></li>
+                    <li><a href="{{ path('index', { category: 0 }) }}">Children</a></li>
+                    <li><a href="{{ path('index', { category: 1 }) }}">Fiction</a></li>
                 </ul>
                 </div>
             </div>
