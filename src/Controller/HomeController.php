@@ -17,26 +17,20 @@ class HomeController extends AbstractController
      */
     public function index(Request $request, BookRepository $bookRepository)
     {
+        $responseData = [];
         $categoryBy = $request->query->get('category');
+
+        /**
+         * When filtering is available
+         */
         if ($categoryBy != NULL && ($categoryBy == 1 || $categoryBy == 0)) {
-            return $this->byCategories((int) $categoryBy, $bookRepository);
+            $responseData['paginator'] = $bookRepository->byCategories((int) $categoryBy);
+            $responseData['category'] = $this->getCategory((int) $categoryBy);
+        } else {
+            $responseData['paginator'] = $bookRepository->findLatest();
         }
 
-        $books = $bookRepository->findLatest();
-
-        return $this->render('home/index.html.twig', [
-            'paginator' => $books,
-        ]);
-    }
-
-    public function byCategories(int $type, BookRepository $bookRepository): Response
-    {
-        $books = $bookRepository->byCategories($type);
-
-        return $this->render('home/index.html.twig', [
-            'paginator' => $books,
-            'category' => $this->getCategory($type)
-        ]);
+        return $this->render('home/index.html.twig', $responseData);
     }
 
     /**
@@ -47,7 +41,15 @@ class HomeController extends AbstractController
         return new Response(print_r($book, true));
     }
 
-    public function getCategory(int $type): string
+    /**
+     * @Route("/book/{id}", name="detailed_book", methods={"GET"})
+     */
+    public function detailedBook(Book $book): Response
+    {
+        return $this->render('home/book_show.html.twig', ['book' => $book]);
+    }
+
+    private function getCategory(int $type): string
     {
         if ($type == 1) {
             return "Fiction";
@@ -55,13 +57,5 @@ class HomeController extends AbstractController
             return "Children";
         }
         return '';
-    }
-
-    /**
-     * @Route("/book/{id}", name="detailed_book", methods={"GET"})
-     */
-    public function detailedBook(Book $book): Response
-    {
-        return $this->render('home/book_show.html.twig', ['book' => $book]);
     }
 }
