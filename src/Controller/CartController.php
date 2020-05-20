@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Book;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class CartController extends AbstractController
 {
@@ -19,7 +20,7 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/add-to-cart/{book}", name="add_to_cart", methods={"GET","POST"})
+     * @Route("/add-to-cart/{book}", name="add_to_cart", methods={"POST"})
      */
     public function addToCart(Book $book)
     {

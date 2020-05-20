@@ -39,7 +39,7 @@
                         <span class="metadata"><i class="fa fa-coins"></i>{{ book.price | format_currency('LKR', {decimal_always_shown: true}) }}</span>
                     </p>
                     <div>
-                        <a href="{{ path('add_to_cart', { book: book.id }) }}" class="add-to-cart btn btn-primary" data-id="{{ book.id }}"><i class="fa fa-cart-plus"></i>Add to Cart</a>
+                        <a data-url="{{ path('add_to_cart', { book: book.id }) }}" class="add-to-cart btn btn-primary" data-id="{{ book.id }}"><i class="fa fa-cart-plus"></i>Add to Cart</a>
                     </div>
                 </article>
             {% else %}
@@ -73,4 +73,9 @@
             </ul>
         </div>
     {% endif %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('cart-mixin') }}
 {% endblock %}
