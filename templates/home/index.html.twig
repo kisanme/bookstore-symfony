@@ -6,7 +6,7 @@
         <article class="col-md-3 book">
             <a href="{{ path('detailed_book', {id: book.id}) }}">
                 <h3 class="book-name">
-                    {{ book.name | capitalize }}
+                    {{ book.name | title }}
                 </h3>
             </a>
 
@@ -14,7 +14,7 @@
                 <span class="metadata"><i class="fa fa-book-open"></i> {{ book.type }}</span>
             </p>
             <p class="book-metadata">
-                <span class="metadata"><i class="fa fa-user"></i> {{ book.author }}</span>
+                <span class="metadata"><i class="fa fa-user"></i> {{ book.author | title }}</span>
             </p>
             <p class="book-metadata">
                 <span class="metadata"><i class="fa fa-coins"></i>{{ book.price | format_currency('LKR', {decimal_always_shown: true}) }}</span>

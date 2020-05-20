@@ -8,15 +8,18 @@
         Image goes here
     </div>
     <div class='col-md-8'>
-        <h1>{{ book.name }}</h1>
+        <h1>{{ book.name | title }}</h1>
         <p class="book-metadata">
             {{ book.description }}
         </p>
         <p class="book-metadata">
-            <span class="metadata"><i class="fa fa-user"></i> {{ book.author }}</span>
+            <span class="metadata"><i class="fa fa-user"></i> {{ book.author | title }}</span>
         </p>
         <p class="book-metadata">
             <span class="metadata"><i class="fa fa-language"></i> {{ book.language }}</span>
+        </p>
+        <p class="book-metadata">
+            <span class="metadata"><i class="fa fa-upload"></i> {{ book.publisher | title }}</span>
         </p>
         <p class="book-metadata">
             <span class="metadata"><i class="fa fa-coins"></i> {{ book.price }}</span>
