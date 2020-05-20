@@ -164,13 +164,6 @@ footer #footer-resources i {
   min-width: 75px
 }
 
-/* Misc. elements
-   ------------------------------------------------------------------------- */
-.section.rss a {
-  color: #f39c12;
-  font-size: 21px;
-}
-
 /* Forms
    ------------------------------------------------------------------------- */
 .form-group.has-error .form-control {
@@ -200,50 +193,6 @@ textarea {
   max-width: 100%
 }
 
-/* Page: 'Technical Requirements Checker'
-   ------------------------------------------------------------------------- */
-body#requirements_checker header h1 {
-  margin-bottom: 0;
-  margin-top: 0
-}
-
-body#requirements_checker header h1 span {
-  font-size: 120%;
-  opacity: 0.7;
-  padding: 0 5px
-}
-
-body#requirements_checker .panel li {
-  margin-bottom: 1em
-}
-
-/* Page: 'Homepage'
-   ------------------------------------------------------------------------- */
-body#homepage {
-  text-align: center
-}
-
-/* Page: 'Login'
-   ------------------------------------------------------------------------- */
-body#login #login-users-help p {
-  font-size: 15px;
-  line-height: 1.42857
-}
-
-body#login #login-users-help p:last-child {
-  margin-bottom: 0
-}
-
-body#login #login-users-help p .label {
-  margin-right: 5px
-}
-
-body#login #login-users-help p .console {
-  display: block;
-  margin: 5px 0;
-  padding: 10px
-}
-
 /* Common Book page elements
    ------------------------------------------------------------------------- */
 .book-metadata {
@@ -258,11 +207,15 @@ body#login #login-users-help p .console {
   }
 }
 
-/* Page: 'Blog index'
+/* Page: 'Book index'
    ------------------------------------------------------------------------- */
-body#blog_index #main h1,
-body#blog_index #main p {
+body#book_index #main h1,
+body#book_index #main p {
   margin-bottom: 0.5em
+}
+
+.container .row {
+    margin-bottom: 0.75em;
 }
 
 body article.book {
@@ -277,45 +230,19 @@ body article.book {
   }
 }
 
-body#blog_index .post-metadata {
+body#book_index .post-metadata {
   font-size: 16px;
   margin-bottom: 8px;
 }
 
-/* Page: 'Blog post show'
+/* Page: 'Book show'
    ------------------------------------------------------------------------- */
-body#blog_post_show #main h3 {
+body#book_show #main h3 {
   margin-bottom: 0.75em
-}
-
-/* Page: 'Comment form error'
-   ------------------------------------------------------------------------- */
-body#comment_form_error h1.text-danger {
-  margin-bottom: 1em
 }
 
 @media (min-width: 768px) and (max-width: 1200px) {
   .container {
     width: 98%;
   }
-}
-
-/* Page: 'Blog search'
-   ------------------------------------------------------------------------- */
-body#blog_search #main h1,
-body#blog_search #main p {
-  margin-bottom: 0.5em
-}
-
-body#blog_search article.post:first-child {
-  margin-top: 2em;
-}
-
-body#blog_search article.post {
-  margin-bottom: 2em;
-}
-
-body#blog_search .post-metadata {
-  font-size: 16px;
-  margin-bottom: 8px;
 }

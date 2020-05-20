@@ -27,6 +27,19 @@ class BookRepository extends ServiceEntityRepository
         return (new Paginator($qb))->paginate($page);
     }
 
+    /**
+     * Should fetch the books by their corresponding categories
+     * 
+     */
+    public function byCategories(int $type, int $page = 1): Paginator
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->where('b.type = :type')
+            ->setParameter('type', $type)
+            ;
+        return (new Paginator($qb))->paginate($page);
+    }
+
     // /**
     //  * @return Book[] Returns an array of Book objects
     //  */

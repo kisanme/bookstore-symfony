@@ -129,6 +129,10 @@ class Book
         return $this;
     }
 
+    /**
+     * When type = 1 the type is "Fiction"
+     * When type = 0 the type is "Children"
+     */
     public function getType(): ?string
     {
         if ($this->type == 1) {

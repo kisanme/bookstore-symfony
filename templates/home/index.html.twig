@@ -1,31 +1,51 @@
 {% extends 'base.html.twig' %}
 
+{% block body_id 'book_index' %}
 {% block main %}
     <div class="container">
-    {% for book in paginator.results %}
-        <article class="col-md-3 book">
-            <a href="{{ path('detailed_book', {id: book.id}) }}">
-                <h3 class="book-name">
-                    {{ book.name | title }}
-                </h3>
-            </a>
-
-            <p class="book-metadata">
-                <span class="metadata"><i class="fa fa-book-open"></i> {{ book.type }}</span>
-            </p>
-            <p class="book-metadata">
-                <span class="metadata"><i class="fa fa-user"></i> {{ book.author | title }}</span>
-            </p>
-            <p class="book-metadata">
-                <span class="metadata"><i class="fa fa-coins"></i>{{ book.price | format_currency('LKR', {decimal_always_shown: true}) }}</span>
-            </p>
-            <div>
-                <button class="btn btn-primary"><i class="fa fa-cart-plus"></i>Add to Cart</button>
+        <div class="row">
+            <div class="col-md-3 col-md-offset-9">
+                <div class="dropdown pull-right">
+                <span> Category: </span>
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    {{ category | default('All') }}
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="/">All</a></li>
+                    <li><a href="/?category=0">Children</a></li>
+                    <li><a href="/?category=1">Fiction</a></li>
+                </ul>
+                </div>
             </div>
-        </article>
-    {% else %}
-        <div class="well">No books found yet! Please add books to the database :)</div>
-    {% endfor %}
+        </div>
+
+        <div class="row">
+            {% for book in paginator.results %}
+                <article class="col-md-3 book">
+                    <a href="{{ path('detailed_book', {id: book.id}) }}">
+                        <h3 class="book-name">
+                            {{ book.name | title }}
+                        </h3>
+                    </a>
+
+                    <p class="book-metadata">
+                        <span class="metadata"><i class="fa fa-book-open"></i> {{ book.type }}</span>
+                    </p>
+                    <p class="book-metadata">
+                        <span class="metadata"><i class="fa fa-user"></i> {{ book.author | title }}</span>
+                    </p>
+                    <p class="book-metadata">
+                        <span class="metadata"><i class="fa fa-coins"></i>{{ book.price | format_currency('LKR', {decimal_always_shown: true}) }}</span>
+                    </p>
+                    <div>
+                        <button class="btn btn-primary"><i class="fa fa-cart-plus"></i>Add to Cart</button>
+                    </div>
+                </article>
+            {% else %}
+                <div class="well">No books found yet! Please add books to the database :)</div>
+            {% endfor %}
+        </div>
     </div>
 
     {% if paginator.hasToPaginate %}
