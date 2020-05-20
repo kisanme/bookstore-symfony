@@ -34,14 +34,6 @@ class HomeController extends AbstractController
     }
 
     /**
-     * @Route("/add-to-cart/{book}", name="add_to_cart", methods={"GET","POST"})
-     */
-    public function addToCart(Book $book)
-    {
-        return new Response(print_r($book, true));
-    }
-
-    /**
      * @Route("/book/{id}", name="detailed_book", methods={"GET"})
      */
     public function detailedBook(Book $book): Response
