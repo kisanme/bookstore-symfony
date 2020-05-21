@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use \DateTime;
 use App\Entity\Invoice;
 use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -33,7 +34,7 @@ class InvoiceRepository extends ServiceEntityRepository
         if (!$inv) {
             $inv = new Invoice();
             $inv->setUser(1);
-            $inv->setInvoiceDate(new \DateTime());
+            $inv->setInvoiceDate(new DateTime());
             $inv->setPaymentStatus(false);
             $inv->setTotalPayable(0);
             $entityManager->persist($inv);
@@ -58,12 +59,13 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $i = $this->fetchOrCreateActiveInvoice();
-        $i->addBook($book);
+        $book->getInvoices()->add($i);
+        $i->getBooks()->add($book);
         $payable = $i->getTotalPayable();
         $payable += $book->getPrice();
         $i->setTotalPayable($payable);
         $em->persist($i);
-        $em->flush();
+        $em->flush($i);
 
         return $i;
     }
@@ -75,7 +77,8 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         $em = $this->getEntityManager();
         $i = $this->fetchOrCreateActiveInvoice();
-        $i->removeBook($book);
+        $book->getInvoices()->removeElement($i);
+        $i->getBooks()->removeElement($book);
         $payable = $i->getTotalPayable();
         $payable -= $book->getPrice();
         $i->setTotalPayable($payable);
