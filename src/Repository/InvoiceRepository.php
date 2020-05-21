@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Invoice;
+use App\Entity\Book;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -49,32 +50,43 @@ class InvoiceRepository extends ServiceEntityRepository
             'payment_status' => false
         ]);
     }
-    // /**
-    //  * @return Invoice[] Returns an array of Invoice objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Invoice
+    /**
+     * @return Invoice Returns the Invoice object for which the cart item was added to
+     */
+    public function addToCart(Book $book): Invoice
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $em = $this->getEntityManager();
+        $i = $this->fetchOrCreateActiveInvoice();
+        $i->addBook($book);
+        $payable = $i->getTotalPayable();
+        $payable += $book->getPrice();
+        $i->setTotalPayable($payable);
+        $em->persist($i);
+        $em->flush();
+
+        return $i;
     }
-    */
+
+    /**
+     * @return Invoice Returns the Invoice object from which the cart item was removed
+     */
+    public function removeFromCart(Book $book): Invoice
+    {
+        $em = $this->getEntityManager();
+        $i = $this->fetchOrCreateActiveInvoice();
+        $i->removeBook($book);
+        $payable = $i->getTotalPayable();
+        $payable -= $book->getPrice();
+        $i->setTotalPayable($payable);
+        // If there are no books in invoice delete the invoice
+        if ($i->getBooks()->count() == 0) {
+            $em->remove($i);
+        } else {
+            $em->persist($i);
+        }
+        $em->flush();
+
+        return $i;
+    }
 }

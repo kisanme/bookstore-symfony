@@ -82,16 +82,7 @@ class InvoiceController extends AbstractController
      */
     public function addToCart(Book $book, InvoiceRepository $inv)
     {
-        // TODO - If the current invoice payment status is null, add to cart adds to the same invoice
-        // TODO - If the current invoice isn't there / Payment status is true, add a new invoice
-        $em = $this->getDoctrine()->getManager();
-        $i = $inv->fetchOrCreateActiveInvoice();
-        $i->addBook($book);
-        $payable = $i->getTotalPayable();
-        $payable += $book->getPrice();
-        $i->setTotalPayable($payable);
-        $em->persist($i);
-        $em->flush();
+        $i = $inv->addToCart($book);
 
         return new Response((string) $i->getId(), 200);
     }
@@ -101,21 +92,7 @@ class InvoiceController extends AbstractController
      */
     public function removeFromCart(Book $book, InvoiceRepository $inv)
     {
-        // TODO - If the current invoice payment status is null, add to cart adds to the same invoice
-        // TODO - If the current invoice isn't there / Payment status is true, add a new invoice
-        $em = $this->getDoctrine()->getManager();
-        $i = $inv->fetchOrCreateActiveInvoice();
-        $i->removeBook($book);
-        $payable = $i->getTotalPayable();
-        $payable -= $book->getPrice();
-        $i->setTotalPayable($payable);
-        // If there are no books in invoice delete the invoice
-        if ($i->getBooks()->count() == 0) {
-            $em->remove($i);
-        } else {
-            $em->persist($i);
-        }
-        $em->flush();
+        $i = $inv->removeFromCart($book);
 
         return new Response((string) $i->getId(), 200);
     }
