@@ -17,7 +17,6 @@
                 </thead>
                 <tbody>
                     {% for book in cart_items %}
-                        
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ book.name }}</td>
@@ -29,6 +28,34 @@
                     </tr>
                     {% endfor %}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td>Total Sum</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ invoice.TotalPayable }}</td>
+                    </tr>
+                    {% for discount in invoice.discounts %}
+                    <tr>
+                        <td>Discounts</td>
+                        <td>{{ discount.name }}</td>
+                        <td></td>
+                        <td>{{ discount.amount }}</td>
+                    </tr>
+                    {% endfor %}
+                    {# <tr>
+                        <td>Coupon Codes</td>
+                        <td></td>
+                        <td class="form-inline"><input class="form-control" placeholder="Enter Coupon Code" type="text"><button class="btn btn-sm btn-primary">Add coupon code</button></td>
+                        <td>{{ invoice.CouponCode }}</td>
+                    </tr>  #}
+                    <tr>
+                        <td>Net Total</td>
+                        <td></td>
+                        <td></td>
+                        <td>{{ invoice.TotalPayable }}</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

@@ -6,6 +6,7 @@ use App\Repository\InvoiceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * @ORM\Entity(repositoryClass=InvoiceRepository::class)
@@ -59,9 +60,15 @@ class Invoice
      */
     private $books;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Discount::class, mappedBy="invoice")
+     */
+    private $discounts;
+
     public function __construct()
     {
         $this->books = new ArrayCollection();
+        $this->discounts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -177,5 +184,58 @@ class Invoice
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Discount[]
+     */
+    public function getDiscounts(): Collection
+    {
+        return $this->discounts;
+    }
+
+    public function addDiscount(Discount $discount): self
+    {
+        if (!$this->discounts->contains($discount)) {
+            $this->discounts[] = $discount;
+            $discount->setInvoice($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDiscount(Discount $discount): self
+    {
+        if ($this->discounts->contains($discount)) {
+            $this->discounts->removeElement($discount);
+            // set the owning side to null (unless already changed)
+            if ($discount->getInvoice() === $this) {
+                $discount->setInvoice(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Book[]
+     */
+    public function getChildrenBooks(): Collection
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->eq('type', 0))
+        ;
+        return $this->books->matching($criteria);
+    }
+
+    /**
+     * @return Discount
+     */
+    public function getFivePercentDiscount()
+    {
+        $criteria = Criteria::create()
+            ->andWhere(Criteria::expr()->eq('percentage', 5))
+        ;
+        return $this->discounts->matching($criteria)->first();
     }
 }
