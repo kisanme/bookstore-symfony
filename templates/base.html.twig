@@ -24,14 +24,18 @@
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">
-                                    <a href="{{ path('cart') }}" class="dropdown-toggle">
-                                        <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
-                                        {% if invoice is defined and invoice is not null %}
+                                    {% if invoice is defined and invoice is not null %}
+                                        <a href="{{ path('cart') }}" class="dropdown-toggle">
                                             <span>{{ invoice.TotalPayable | format_currency('LKR', {decimal_always_shown: true }) }}</span>
-                                        {% else %}
+                                            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
+                                            <span> Checkout </span>
+                                        </a>
+                                    {% else %}
+                                        <a class="dropdown-toggle">
+                                            <i class="fa fa-cart-arrow-down" aria-hidden="true"></i>
                                             <span>Cart</span>
-                                        {% endif %}
-                                    </a>
+                                        </a>
+                                    {% endif %}
                                 </li>
                             </ul>
                         </div>
