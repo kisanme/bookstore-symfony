@@ -24,6 +24,7 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         $entityManager = $this->getEntityManager();
         $inv = $this->findOneBy([
+            'user' => 1,
             'payment_status' => false
         ]);
 
@@ -38,6 +39,15 @@ class InvoiceRepository extends ServiceEntityRepository
             $entityManager->flush();
         }
         return $inv;
+    }
+
+    public function activeInvoice(): ?Invoice
+    {
+        $entityManager = $this->getEntityName();
+        return $this->findOneBy([
+            'user' => 1,
+            'payment_status' => false
+        ]);
     }
     // /**
     //  * @return Invoice[] Returns an array of Invoice objects
