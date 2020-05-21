@@ -55,13 +55,13 @@ class Invoice
     private $discount_amount;
 
     /**
-     * @ORM\OneToMany(targetEntity=Cart::class, mappedBy="invoice", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity=Book::class, inversedBy="invoices")
      */
-    private $carts;
+    private $books;
 
     public function __construct()
     {
-        $this->carts = new ArrayCollection();
+        $this->books = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,31 +154,26 @@ class Invoice
     }
 
     /**
-     * @return Collection|Cart[]
+     * @return Collection|Book[]
      */
-    public function getCarts(): Collection
+    public function getBooks(): Collection
     {
-        return $this->carts;
+        return $this->books;
     }
 
-    public function addCart(Cart $cart): self
+    public function addBook(Book $book): self
     {
-        if (!$this->carts->contains($cart)) {
-            $this->carts[] = $cart;
-            $cart->setInvoice($this);
+        if (!$this->books->contains($book)) {
+            $this->books[] = $book;
         }
 
         return $this;
     }
 
-    public function removeCart(Cart $cart): self
+    public function removeBook(Book $book): self
     {
-        if ($this->carts->contains($cart)) {
-            $this->carts->removeElement($cart);
-            // set the owning side to null (unless already changed)
-            if ($cart->getInvoice() === $this) {
-                $cart->setInvoice(null);
-            }
+        if ($this->books->contains($book)) {
+            $this->books->removeElement($book);
         }
 
         return $this;

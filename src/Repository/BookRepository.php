@@ -22,7 +22,8 @@ class BookRepository extends ServiceEntityRepository
 
     public function findLatest(int $page = 1): Paginator
     {
-        $qb = $this->createQueryBuilder('b');
+        $qb = $this->createQueryBuilder('b')
+            ;
 
         return (new Paginator($qb))->paginate($page);
     }

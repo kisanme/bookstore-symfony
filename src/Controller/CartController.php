@@ -30,13 +30,28 @@ class CartController extends AbstractController
         // TODO - If the current invoice isn't there / Payment status is true, add a new invoice
         $em = $this->getDoctrine()->getManager();
         $i = $inv->fetchOrCreateActiveInvoice();
-        $cart = new Cart();
-        $cart->addBook($book);
-        $cart->setInvoice($i);
-        $i->addCart($cart);
-        $em->persist($cart);
+        $i->addBook($book);
         $payable = $i->getTotalPayable();
         $payable += $book->getPrice();
+        $i->setTotalPayable($payable);
+        $em->persist($i);
+        $em->flush();
+
+        return new Response(print_r($i->getId(), true));
+    }
+
+    /**
+     * @Route("/remove-from-cart/{book}", name="remove_from_cart", methods={"POST"})
+     */
+    public function removeFromCart(Book $book, InvoiceRepository $inv)
+    {
+        // TODO - If the current invoice payment status is null, add to cart adds to the same invoice
+        // TODO - If the current invoice isn't there / Payment status is true, add a new invoice
+        $em = $this->getDoctrine()->getManager();
+        $i = $inv->fetchOrCreateActiveInvoice();
+        $i->removeBook($book);
+        $payable = $i->getTotalPayable();
+        $payable -= $book->getPrice();
         $i->setTotalPayable($payable);
         $em->persist($i);
         $em->flush();
