@@ -2,22 +2,31 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Book;
-use App\Entity\Cart;
+use App\Repository\InvoiceRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
-use App\Repository\InvoiceRepository;
 
-class CartController extends AbstractController
+class InvoiceController extends AbstractController
 {
     /**
-     * @Route("/cart", name="cart")
+     * @Route("/invoice", name="invoice")
      */
     public function index()
     {
-        return $this->render('cart/index.html.twig', [
-            'controller_name' => 'CartController',
+        return $this->render('invoice/index.html.twig', [
+            'controller_name' => 'InvoiceController',
+        ]);
+    }
+
+    /**
+     * @Route("/cart", name="cart")
+     */
+    public function cart()
+    {
+        return $this->render('invoice/index.html.twig', [
+            'controller_name' => 'InvoiceController',
         ]);
     }
 
@@ -57,9 +66,5 @@ class CartController extends AbstractController
         $em->flush();
 
         return new Response(print_r($i->getId(), true));
-    }
-
-    private function updateTotalInInvoice() {
-
     }
 }
