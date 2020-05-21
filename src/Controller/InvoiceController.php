@@ -27,8 +27,11 @@ class InvoiceController extends AbstractController
     public function cart(InvoicedResponse $r, InvoiceRepository $inv)
     {
         $res = $r->initializeResponse();
-        $res['controller_name'] = 'InvoiceController';
-        return $this->render('invoice/index.html.twig', $res);
+        if ($res['invoice'] == NULL) {
+            return $this->redirectToRoute('index');
+        }
+        $res['cart_items'] = $res['invoice']->getBooks();
+        return $this->render('cart/index.html.twig', $res);
     }
 
     /**
