@@ -46,7 +46,7 @@ class InvoiceController extends AbstractController
         $em->persist($i);
         $em->flush();
 
-        return new Response(print_r($i->getId(), true));
+        return new Response((string) $i->getId(), 200);
     }
 
     /**
@@ -62,9 +62,14 @@ class InvoiceController extends AbstractController
         $payable = $i->getTotalPayable();
         $payable -= $book->getPrice();
         $i->setTotalPayable($payable);
-        $em->persist($i);
+        // If there are no books in invoice delete the invoice
+        if ($i->getBooks()->count() == 0) {
+            $em->remove($i);
+        } else {
+            $em->persist($i);
+        }
         $em->flush();
 
-        return new Response(print_r($i->getId(), true));
+        return new Response((string) $i->getId(), 200);
     }
 }
