@@ -24,7 +24,18 @@
         <p class="book-metadata">
             <span class="metadata"><i class="fa fa-coins"></i> {{ book.price }}</span>
         </p>
-        <button class='btn btn-primary'><i class='fa fa-cart-plus'></i> Add to cart</button>
+        <div>
+            {% if book.invoices|last is empty %}
+                <a data-url="{{ path('add_to_cart', { book: book.id }) }}" class="add-to-cart btn btn-primary" data-id="{{ book.id }}"><i class="fa fa-cart-plus"></i>Add to Cart</a>
+            {% else %}
+                <a data-url="{{ path('remove_from_cart', { book: book.id }) }}" class="remove-from-cart btn btn-info" data-id="{{ book.id }}"><i class="fa fa-shopping-cart"></i>Remove from Cart</a>
+            {% endif %}
+        </div>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('cart-mixin') }}
 {% endblock %}
