@@ -41,6 +41,15 @@ class BookRepository extends ServiceEntityRepository
         return (new Paginator($qb))->paginate($page);
     }
 
+    public function getCategory(int $type): string
+    {
+        if ($type == 1) {
+            return "Fiction";
+        } else if ($type == 0) {
+            return "Children";
+        }
+        return '';
+    }
     // /**
     //  * @return Book[] Returns an array of Book objects
     //  */

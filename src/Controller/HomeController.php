@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Service\InvoicedResponse;
 use App\Repository\BookRepository;
 use App\Repository\InvoiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,9 +17,14 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="index", methods={"GET"})
      */
-    public function index(Request $request, BookRepository $bookRepository, InvoiceRepository $invoiceRepository)
+    public function index(
+        Request $request,
+        BookRepository $bookRepository,
+        InvoiceRepository $invoiceRepository,
+        InvoicedResponse $r
+    ): Response
     {
-        $responseData = [];
+        $responseData = $r->initializeResponse();
         $categoryBy = $request->query->get('category');
 
         /**
@@ -26,11 +32,10 @@ class HomeController extends AbstractController
          */
         if ($categoryBy != NULL && ($categoryBy == 1 || $categoryBy == 0)) {
             $responseData['paginator'] = $bookRepository->byCategories((int) $categoryBy);
-            $responseData['category'] = $this->getCategory((int) $categoryBy);
+            $responseData['category'] = $bookRepository->getCategory((int) $categoryBy);
         } else {
             $responseData['paginator'] = $bookRepository->findLatest();
         }
-        $responseData['invoice'] = $invoiceRepository->activeInvoice();
 
         return $this->render('home/index.html.twig', $responseData);
     }
@@ -38,21 +43,14 @@ class HomeController extends AbstractController
     /**
      * @Route("/book/{id}", name="detailed_book", methods={"GET"})
      */
-    public function detailedBook(Book $book, InvoiceRepository $invoiceRepository): Response
+    public function detailedBook(
+        Book $book,
+        InvoiceRepository $invoiceRepository,
+        InvoicedResponse $r
+    ): Response
     {
-        return $this->render('home/book_show.html.twig', [
-            'book' => $book,
-            'invoice' => $invoiceRepository->activeInvoice()
-        ]);
-    }
-
-    private function getCategory(int $type): string
-    {
-        if ($type == 1) {
-            return "Fiction";
-        } else if ($type == 0) {
-            return "Children";
-        }
-        return '';
+        $responseData = $r->initializeResponse();
+        $responseData['book'] = $book;
+        return $this->render('home/book_show.html.twig', $responseData);
     }
 }

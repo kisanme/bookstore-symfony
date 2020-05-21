@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Book;
+use App\Service\InvoicedResponse;
 use App\Repository\InvoiceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -23,11 +24,11 @@ class InvoiceController extends AbstractController
     /**
      * @Route("/cart", name="cart")
      */
-    public function cart()
+    public function cart(InvoicedResponse $r, InvoiceRepository $inv)
     {
-        return $this->render('invoice/index.html.twig', [
-            'controller_name' => 'InvoiceController',
-        ]);
+        $res = $r->initializeResponse();
+        $res['controller_name'] = 'InvoiceController';
+        return $this->render('invoice/index.html.twig', $res);
     }
 
     /**
