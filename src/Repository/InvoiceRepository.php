@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use \DateTime;
-use App\Entity\Invoice;
 use App\Entity\Book;
+use App\Entity\Discount;
+use App\Entity\Invoice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,6 +21,7 @@ class InvoiceRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Invoice::class);
+        $this->min_books_five_percent_discount = 2;
     }
 
     public function fetchOrCreateActiveInvoice(): Invoice
@@ -67,6 +69,7 @@ class InvoiceRepository extends ServiceEntityRepository
         $em->persist($i);
         $em->flush($i);
 
+        $this->fivePercentDiscount($i);
         return $i;
     }
 
@@ -90,6 +93,51 @@ class InvoiceRepository extends ServiceEntityRepository
         }
         $em->flush();
 
+        $this->fivePercentDiscount($i);
         return $i;
+    }
+
+    protected function fivePercentDiscount(Invoice $invoice)
+    {
+        $em = $this->getEntityManager();
+        // If child book category is greater than 5
+        $childBooks = $invoice->getChildrenBooks();
+        $discount = $invoice->getFivePercentDiscount();
+        if ($discount == false) {
+            if ($childBooks->count() >= $this->min_books_five_percent_discount) {
+                $discount = new Discount;
+                $discount->setName('10% discount from the Children books total');
+                $discount->setType(1);
+                $discount->setInvoice($invoice);
+                $discount->setPercentage(5);
+                $invoice->getDiscounts()->add($discount);
+                $discountAmount = 0;
+                foreach($childBooks as $b) {
+                    $discountAmount += $b->getPrice();
+                }
+                $discountAmount = $discountAmount * 0.05;
+                $discount->setAmount($discountAmount);
+                $em->persist($discount);
+                $em->persist($invoice);
+                $em->flush();
+            }
+        } else {
+            if ($childBooks->count() < $this->min_books_five_percent_discount) {
+                $invoice->getDiscounts()->removeElement($discount);
+                $em->remove($discount);
+                $em->persist($invoice);
+                $em->flush();
+            } else {
+                // Recalculate discount
+                $discountAmount = 0;
+                foreach($childBooks as $b) {
+                    $discountAmount += $b->getPrice();
+                }
+                $discountAmount = $discountAmount * 0.05;
+                $discount->setAmount($discountAmount);
+                $em->persist($discount);
+                $em->flush();
+            }
+        }
     }
 }

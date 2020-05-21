@@ -34,45 +34,6 @@ class InvoiceController extends AbstractController
             return $this->redirectToRoute('index');
         }
         $res['cart_items'] = $invoice->getBooks();
-        // If child book category is greater than 5
-        $childBooks = $invoice->getChildrenBooks();
-        $discount = $invoice->getFivePercentDiscount();
-        if ($discount == false) {
-            if ($childBooks->count() >= 2) {
-                $discount = new Discount;
-                $discount->setName('10% discount from the Children books total');
-                $discount->setType(1);
-                $discount->setInvoice($invoice);
-                $discount->setPercentage(5);
-                $invoice->addDiscount($discount);
-                $discountAmount = 0;
-                foreach($childBooks as $b) {
-                    $discountAmount += $b->getPrice();
-                }
-                $discountAmount = $discountAmount * 0.05;
-                $discount->setAmount($discountAmount);
-                $em->persist($discount);
-                $em->persist($invoice);
-                $em->flush();
-            }
-        } else {
-            if ($childBooks->count() < 2) {
-                $invoice->removeDiscount($discount);
-                $em->remove($discount);
-                $em->persist($invoice);
-                $em->flush();
-            } else {
-                // Recalculate discount
-                $discountAmount = 0;
-                foreach($childBooks as $b) {
-                    $discountAmount += $b->getPrice();
-                }
-                $discountAmount = $discountAmount * 0.05;
-                $discount->setAmount($discountAmount);
-                $em->persist($discount);
-                $em->flush();
-            }
-        }
         // If both categories are equal to 10
         return $this->render('cart/index.html.twig', $res);
     }
