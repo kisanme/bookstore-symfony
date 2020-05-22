@@ -30,9 +30,13 @@ class HomeController extends AbstractController
         /**
          * When filtering is available
          */
-        if ($categoryBy != NULL && ($categoryBy == 1 || $categoryBy == 0)) {
-            $responseData['paginator'] = $bookRepository->byCategories((int) $categoryBy);
-            $responseData['category'] = $bookRepository->getCategory((int) $categoryBy);
+        if ($categoryBy != NULL) {
+            if ($categoryBy == 1 || $categoryBy == 0) {
+                $responseData['paginator'] = $bookRepository->byCategories((int) $categoryBy);
+                $responseData['category'] = $bookRepository->getCategory((int) $categoryBy);
+            } else {
+                return $this->redirectToRoute('index');
+            }
         } else {
             $responseData['paginator'] = $bookRepository->findLatest();
         }
