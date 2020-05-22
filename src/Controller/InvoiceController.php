@@ -21,17 +21,7 @@ class InvoiceController extends AbstractController
     /**
      * @Route("/invoice", name="invoice")
      */
-    public function index()
-    {
-        return $this->render('invoice/index.html.twig', [
-            'controller_name' => 'InvoiceController',
-        ]);
-    }
-
-    /**
-     * @Route("/cart", name="cart")
-     */
-    public function cart(
+    public function index(
         Request $request,
         InvoicedResponse $r,
         InvoiceRepository $inv,
@@ -68,12 +58,12 @@ class InvoiceController extends AbstractController
             $em->persist($invoice);
             $em->flush();
 
-            return $this->redirectToRoute('cart');
+            return $this->redirectToRoute('invoice');
         }
 
         $res['coupon_form'] = $couponForm->createView();
 
-        return $this->render('cart/index.html.twig', $res);
+        return $this->render('invoice/index.html.twig', $res);
     }
 
     private function couponForm(Invoice $inv): FormInterface
