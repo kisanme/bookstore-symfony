@@ -53,7 +53,7 @@ class Invoice
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $discount_amount;
+    private $net_total;
 
     /**
      * @ORM\ManyToMany(targetEntity=Book::class, inversedBy="invoices")
@@ -153,14 +153,14 @@ class Invoice
         return $this;
     }
 
-    public function getDiscountAmount(): ?int
+    public function getNetTotal(): ?int
     {
-        return $this->discount_amount;
+        return $this->net_total;
     }
 
-    public function setDiscountAmount(?int $discount_amount): self
+    public function setNetTotal(?int $net_total): self
     {
-        $this->discount_amount = $discount_amount;
+        $this->net_total = $net_total;
 
         return $this;
     }
