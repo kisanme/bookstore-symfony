@@ -43,12 +43,14 @@
                         <td>{{ discount.amount }}</td>
                     </tr>
                     {% endfor %}
-                    {# <tr>
+                    {% if coupon is defined and coupon is not null %}
+                    <tr>
                         <td>Coupon Codes</td>
-                        <td></td>
-                        <td class="form-inline"><input class="form-control" placeholder="Enter Coupon Code" type="text"><button class="btn btn-sm btn-primary">Add coupon code</button></td>
-                        <td>{{ invoice.CouponCode }}</td>
-                    </tr>  #}
+                        <td>15% discount for the total bill</td>
+                        <td>{{ coupon.CouponCode }}</td>
+                        <td>{{ coupon.amount }}</td>
+                    </tr>
+                    {% endif %}
                     <tr>
                         <td>Net Total</td>
                         <td></td>
@@ -58,6 +60,9 @@
                 </tfoot>
             </table>
         </div>
+        {% if coupon is not defined or coupon is null %}
+            {{ form(coupon_form, {'attr': {'class': 'coupon-form'}})}}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

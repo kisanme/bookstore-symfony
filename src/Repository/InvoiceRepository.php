@@ -71,8 +71,13 @@ class InvoiceRepository extends ServiceEntityRepository
         $em->persist($i);
         $em->flush($i);
 
-        $this->tenPercentDiscountManager($i);
-        $this->fivePercentDiscountManager($i);
+
+        if ($i->getCoupon()) {
+            $this->refreshCouponDiscount($i);
+        } else {
+            $this->tenPercentDiscountManager($i);
+            $this->fivePercentDiscountManager($i);
+        }
         return $i;
     }
 
@@ -99,8 +104,12 @@ class InvoiceRepository extends ServiceEntityRepository
         }
         $em->flush();
 
-        $this->tenPercentDiscountManager($i);
-        $this->fivePercentDiscountManager($i);
+        if ($i->getCoupon()) {
+            $this->refreshCouponDiscount($i);
+        } else {
+            $this->tenPercentDiscountManager($i);
+            $this->fivePercentDiscountManager($i);
+        }
         return $i;
     }
 
@@ -168,5 +177,14 @@ class InvoiceRepository extends ServiceEntityRepository
                 $this->disRepo->refreshDiscountsForBooks($discount, $allAssociatedBooks);
             }
         }
+    }
+
+    public function refreshCouponDiscount(Invoice $invoice)
+    {
+        $em = $this->getEntityManager();
+        $coupon = $invoice->getCoupon();
+        $coupon->setAmount($invoice->getTotalPayable() * ($coupon->getPercentage()/100));
+        $em->persist($coupon);
+        $em->flush();
     }
 }

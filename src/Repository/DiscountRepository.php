@@ -70,6 +70,20 @@ class DiscountRepository extends ServiceEntityRepository
     }
 
     /**
+     * Removes all the discounts for a particular invoice
+     */
+    public function removeAllDiscountForInvoice(Invoice $invoice)
+    {
+        $em = $this->getEntityManager();
+        foreach($invoice->getDiscounts() as $dis) {
+            $em->remove($dis);
+        }
+        $invoice->getDiscounts()->clear();
+        $em->persist($invoice);
+        $em->flush();
+    }
+
+    /**
      * Recalculates the 10% discount for given books
      * and saves it to the database (discount table is modified)
      * 

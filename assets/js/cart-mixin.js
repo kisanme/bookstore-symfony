@@ -12,7 +12,6 @@ $(document).ready(function(){
                 location.reload();
             }
         })
-        // console.log('clicked item', $button.data('url'), $button.data('id'))
     });
 
     /**
@@ -28,6 +27,6 @@ $(document).ready(function(){
                 location.reload();
             }
         })
-        // console.log('clicked item', $button.data('url'), $button.data('id'))
     })
+
 })
