@@ -218,12 +218,16 @@ class Invoice
     }
 
     /**
+     * @param Integer The category of books 
+     *      0 - Children
+     *      1 - Fiction
+     * 
      * @return Collection|Book[]
      */
-    public function getChildrenBooks(): Collection
+    public function getBooksByCategory(int $category = 0): Collection
     {
         $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->eq("type", 0))
+            ->andWhere(Criteria::expr()->eq("type", $category))
         ;
         return $this->getBooks()->matching($criteria);
     }
@@ -231,10 +235,10 @@ class Invoice
     /**
      * @return Discount
      */
-    public function getTenPercentDiscount()
+    public function getPercentDiscountForInvoice(int $percentage = 10)
     {
         $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->eq('percentage', 10))
+            ->andWhere(Criteria::expr()->eq('percentage', $percentage))
         ;
         return $this->discounts->matching($criteria)->first();
     }

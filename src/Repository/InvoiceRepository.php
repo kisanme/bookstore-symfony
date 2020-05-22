@@ -22,6 +22,7 @@ class InvoiceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Invoice::class);
         $this->min_books_ten_percent_discount = 2;
+        $this->min_books_five_percent_discount = 2;
         $this->disRepo = $disRepo;
     }
 
@@ -71,6 +72,7 @@ class InvoiceRepository extends ServiceEntityRepository
         $em->flush($i);
 
         $this->tenPercentDiscountManager($i);
+        $this->fivePercentDiscountManager($i);
         return $i;
     }
 
@@ -98,6 +100,7 @@ class InvoiceRepository extends ServiceEntityRepository
         $em->flush();
 
         $this->tenPercentDiscountManager($i);
+        $this->fivePercentDiscountManager($i);
         return $i;
     }
 
@@ -110,14 +113,14 @@ class InvoiceRepository extends ServiceEntityRepository
         $em->refresh($invoice);
 
         // If child book category is greater than 5
-        $discount = $invoice->getTenPercentDiscount();
-        $childBooks = $invoice->getChildrenBooks();
+        $discount = $invoice->getPercentDiscountForInvoice(10);
+        $childBooks = $invoice->getBooksByCategory(0);
 
         // When there are no discounts
         if ($discount == false) {
             if ($childBooks->count() >= $this->min_books_ten_percent_discount) {
                 // Creates a ten percent discount entity with association to relevant child books
-                $this->disRepo->createTenPercentDiscountForInvoice($invoice, $childBooks);
+                $this->disRepo->createPercentedDiscountForInvoice($invoice, $childBooks, 10, '10% discount from the children books total');
             }
         } else {
             if ($childBooks->count() < $this->min_books_ten_percent_discount) {
@@ -125,7 +128,41 @@ class InvoiceRepository extends ServiceEntityRepository
                 $this->disRepo->removeDiscountForInvoice($invoice, $discount);
             } else {
                 // Recalculate discount
-                $this->disRepo->refreshTenPercentDiscountsForBooks($discount, $childBooks);
+                $this->disRepo->refreshDiscountsForBooks($discount, $childBooks);
+            }
+        }
+    }
+
+    protected function fivePercentDiscountManager(Invoice $invoice)
+    {
+        $em = $this->getEntityManager();
+        $em->refresh($invoice);
+
+        // If 10 books from each category is bought
+        $discount = $invoice->getPercentDiscountForInvoice(5);
+        $childBooks = $invoice->getBooksByCategory(0);
+        $fictionBooks = $invoice->getBooksByCategory(1);
+        $allAssociatedBooks = $invoice->getBooks();
+
+        // When there are no discounts
+        if ($discount == false) {
+            if (
+                $childBooks->count() >= $this->min_books_five_percent_discount && 
+                $fictionBooks->count() >= $this->min_books_five_percent_discount
+            ) {
+                // Creates a five percent discount entity with association to all relevant books
+                $this->disRepo->createPercentedDiscountForInvoice($invoice, $allAssociatedBooks, 5, 'Additional 5% discount from the books total');
+            }
+        } else {
+            if (
+                $childBooks->count() < $this->min_books_five_percent_discount ||
+                $fictionBooks->count() < $this->min_books_five_percent_discount
+            ) {
+                // Remove the discount for invoice
+                $this->disRepo->removeDiscountForInvoice($invoice, $discount);
+            } else {
+                // Recalculate discount
+                $this->disRepo->refreshDiscountsForBooks($discount, $allAssociatedBooks);
             }
         }
     }

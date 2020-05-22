@@ -27,25 +27,30 @@ class DiscountRepository extends ServiceEntityRepository
      * 
      * @param Invoice The invoice for which the discount is related to
      * @param Collection Collection of books for which the discount is applicable for
+     * @param Integer Discount percentage
+     * @param String Discount description
      */
-    public function createTenPercentDiscountForInvoice(Invoice $invoice, Collection $books)
+    public function createPercentedDiscountForInvoice(
+        Invoice $invoice,
+        Collection $books,
+        int $percentage,
+        string $description
+    )
     {
         $em = $this->getEntityManager();
         $discount = new Discount;
-        $discount->setName('10% discount from the Children books total');
-        $discount->setType(1);
+        $discount->setName($description);
+        $type = $percentage == 10 ? 1 : 2;
+        $discount->setType($type);
         $discount->setInvoice($invoice);
-        $discount->setPercentage(10);
+        $discount->setPercentage($percentage);
+        $discount->setAmount(0);
         $invoice->getDiscounts()->add($discount);
-        $discountAmount = 0;
-        foreach($books as $b) {
-            $discountAmount += $b->getPrice();
-        }
-        $discountAmount = $discountAmount * 0.10;
-        $discount->setAmount($discountAmount);
-        $em->persist($discount);
         $em->persist($invoice);
+        $em->persist($discount);
         $em->flush();
+
+        $this->refreshDiscountsForBooks($discount, $books);
     }
 
     /**
@@ -71,14 +76,14 @@ class DiscountRepository extends ServiceEntityRepository
      * @param Discount The discount entity in which the value should be recalculated
      * @param Collection The list of relavant books which are under the given discount entity
      */
-    public function refreshTenPercentDiscountsForBooks(Discount $discount, Collection $books)
+    public function refreshDiscountsForBooks(Discount $discount, Collection $books)
     {
         $em = $this->getEntityManager();
         $discountAmount = 0;
         foreach($books as $b) {
             $discountAmount += $b->getPrice();
         }
-        $discountAmount = $discountAmount * 0.10;
+        $discountAmount = $discountAmount * ($discount->getPercentage() / 100);
         $discount->setAmount($discountAmount);
         $em->persist($discount);
         $em->flush();
