@@ -21,7 +21,7 @@ class HomeControllerTest extends WebTestCase
         $this->assertGreaterThan(0, $crawler->filter('a.add-to-cart')->count());
     }
 
-    public function testChildrenCategoriedIndex()
+    public function testCategoriedIndex()
     {
         $client = static::createClient();
 
@@ -36,5 +36,20 @@ class HomeControllerTest extends WebTestCase
                 $this->assertGreaterThan(0, $crawler->filter('a.add-to-cart')->count());
             }
         }
+    }
+
+    public function testTakesToBookDetail()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/');
+
+        $firstBook = $crawler
+            ->filter('article.book > a')
+            ->first()
+        ;
+        $firstBookName = $firstBook->text();
+        $crawler = $client->click($firstBook->link());
+        $this->assertEquals($firstBookName, $crawler->filter('h1')->first()->text());
+        $this->assertSelectorTextContains('a.add-to-cart', 'Add to Cart');
     }
 }
