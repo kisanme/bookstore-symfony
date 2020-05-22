@@ -21,8 +21,8 @@
                         <td>{{ loop.index }}</td>
                         <td>{{ book.name }}</td>
                         <td>{{ book.author }}</td>
-                        <td>{{ book.price }}</td>
-                        <td class="pull-right">
+                        <td class="text-right">{{ book.price | format_currency('LKR', {decimal_always_shown: true }) }}</td>
+                        <td class="text-center">
                             <a data-url="{{ path('remove_from_cart', { book: book.id }) }}" class="remove-from-cart btn btn-sm btn-info" data-id="{{ book.id }}"><i class="fa fa-shopping-cart"></i>Remove from Cart</a>
                         </td>
                     </tr>
@@ -33,14 +33,14 @@
                         <td>Total Sum</td>
                         <td></td>
                         <td></td>
-                        <td>{{ invoice.TotalPayable }}</td>
+                        <td class="text-right">{{ invoice.TotalPayable | format_currency('LKR', {decimal_always_shown: true })  }}</td>
                     </tr>
                     {% for discount in invoice.discounts %}
                     <tr>
                         <td>Discounts</td>
                         <td>{{ discount.name }}</td>
                         <td></td>
-                        <td>{{ discount.amount }}</td>
+                        <td class="text-right">{{ discount.amount | format_currency('LKR', {decimal_always_shown: true })  }}</td>
                     </tr>
                     {% endfor %}
                     {% if coupon is defined and coupon is not null %}
@@ -48,14 +48,14 @@
                         <td>Coupon Codes</td>
                         <td>15% discount for the total bill</td>
                         <td>{{ coupon.CouponCode }}</td>
-                        <td>{{ coupon.amount }}</td>
+                        <td class="text-right">{{ coupon.amount | format_currency('LKR', {decimal_always_shown: true }) }}</td>
                     </tr>
                     {% endif %}
                     <tr>
                         <td>Net Total</td>
                         <td></td>
                         <td></td>
-                        <td>{{ invoice.NetTotal }}</td>
+                        <td class="text-right">{{ invoice.NetTotal | format_currency('LKR', {decimal_always_shown: true })  }}</td>
                     </tr>
                 </tfoot>
             </table>
