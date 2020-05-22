@@ -61,9 +61,14 @@ class Invoice
     private $books;
 
     /**
-     * @ORM\OneToMany(targetEntity=Discount::class, mappedBy="invoice")
+     * @ORM\OneToMany(targetEntity=Discount::class, mappedBy="invoice", cascade={"remove"})
      */
     private $discounts;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Coupon::class, mappedBy="invoice", cascade={"persist", "remove"})
+     */
+    private $coupon;
 
     public function __construct()
     {
@@ -241,5 +246,22 @@ class Invoice
             ->andWhere(Criteria::expr()->eq('percentage', $percentage))
         ;
         return $this->discounts->matching($criteria)->first();
+    }
+
+    public function getCoupon(): ?Coupon
+    {
+        return $this->coupon;
+    }
+
+    public function setCoupon(Coupon $coupon): self
+    {
+        $this->coupon = $coupon;
+
+        // set the owning side of the relation if necessary
+        if ($coupon->getInvoice() !== $this) {
+            $coupon->setInvoice($this);
+        }
+
+        return $this;
     }
 }

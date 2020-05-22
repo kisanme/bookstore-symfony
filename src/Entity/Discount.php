@@ -28,7 +28,7 @@ class Discount
     private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Invoice::class, inversedBy="discounts")
+     * @ORM\ManyToOne(targetEntity=Invoice::class, inversedBy="discounts", cascade={"remove"})
      */
     private $invoice;
 

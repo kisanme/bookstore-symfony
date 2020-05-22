@@ -107,7 +107,7 @@ class InvoiceRepository extends ServiceEntityRepository
     /**
      * Identifies and performs relevant 10% discount related operations for the given invoice
      */
-    protected function tenPercentDiscountManager(Invoice $invoice)
+    private function tenPercentDiscountManager(Invoice $invoice)
     {
         $em = $this->getEntityManager();
         $em->refresh($invoice);
@@ -133,7 +133,10 @@ class InvoiceRepository extends ServiceEntityRepository
         }
     }
 
-    protected function fivePercentDiscountManager(Invoice $invoice)
+    /**
+     * Identifies and performs relevant 5% discount related operations for the given invoice
+     */
+    private function fivePercentDiscountManager(Invoice $invoice)
     {
         $em = $this->getEntityManager();
         $em->refresh($invoice);
