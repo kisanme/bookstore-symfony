@@ -41,12 +41,22 @@ class InvoiceController extends AbstractController
         $res = $r->initializeResponse();
         $em = $this->getDoctrine()->getManager();
         $invoice = $res['invoice'];
+
         if ($invoice == NULL) {
             return $this->redirectToRoute('index');
         }
-        $res['cart_items'] = $invoice->getBooks();
+
         $couponForm = $this->couponForm($invoice);
         $res['coupon'] = $invoice->getCoupon();
+
+        // Refreshes the calculation on loading to the template
+        if (! $res['coupon']) {
+            $inv->tenPercentDiscountManager($invoice);
+            $inv->fivePercentDiscountManager($invoice);
+            $inv->refreshNetTotal($invoice);
+        }
+
+        $res['cart_items'] = $invoice->getBooks();
 
         $couponForm->handleRequest($request);
         if ($couponForm->isSubmitted() && $couponForm->isValid()) {

@@ -41,6 +41,7 @@ class InvoiceRepository extends ServiceEntityRepository
             $inv->setInvoiceDate(new DateTime());
             $inv->setPaymentStatus(false);
             $inv->setTotalPayable(0);
+            $inv->setNetTotal(0);
             $entityManager->persist($inv);
             $entityManager->flush();
         }
@@ -77,6 +78,7 @@ class InvoiceRepository extends ServiceEntityRepository
         } else {
             $this->tenPercentDiscountManager($i);
             $this->fivePercentDiscountManager($i);
+            $this->refreshNetTotal($i);
         }
         return $i;
     }
@@ -109,6 +111,7 @@ class InvoiceRepository extends ServiceEntityRepository
         } else {
             $this->tenPercentDiscountManager($i);
             $this->fivePercentDiscountManager($i);
+            $this->refreshNetTotal($i);
         }
         return $i;
     }
@@ -116,7 +119,7 @@ class InvoiceRepository extends ServiceEntityRepository
     /**
      * Identifies and performs relevant 10% discount related operations for the given invoice
      */
-    private function tenPercentDiscountManager(Invoice $invoice)
+    public function tenPercentDiscountManager(Invoice $invoice)
     {
         $em = $this->getEntityManager();
         $em->refresh($invoice);
@@ -145,7 +148,7 @@ class InvoiceRepository extends ServiceEntityRepository
     /**
      * Identifies and performs relevant 5% discount related operations for the given invoice
      */
-    private function fivePercentDiscountManager(Invoice $invoice)
+    public function fivePercentDiscountManager(Invoice $invoice)
     {
         $em = $this->getEntityManager();
         $em->refresh($invoice);
@@ -184,7 +187,21 @@ class InvoiceRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $coupon = $invoice->getCoupon();
         $coupon->setAmount($invoice->getTotalPayable() * ($coupon->getPercentage()/100));
+        $invoice->setNetTotal($invoice->getTotalPayable() - $coupon->getAmount());
         $em->persist($coupon);
+        $em->persist($invoice);
+        $em->flush();
+    }
+
+    public function refreshNetTotal(Invoice $invoice)
+    {
+        $em = $this->getEntityManager();
+        $totalDiscount = 0;
+        foreach ($invoice->getDiscounts() as $discount) {
+            $totalDiscount += $discount->getAmount();
+        }
+        $invoice->setNetTotal($invoice->getTotalPayable() - $totalDiscount);
+        $em->persist($invoice);
         $em->flush();
     }
 }

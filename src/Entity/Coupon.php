@@ -30,7 +30,7 @@ class Coupon
     private $amount;
 
     /**
-     * @ORM\OneToOne(targetEntity=Invoice::class, inversedBy="coupon", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Invoice::class, inversedBy="coupon", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $invoice;

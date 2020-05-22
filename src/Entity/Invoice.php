@@ -66,7 +66,7 @@ class Invoice
     private $discounts;
 
     /**
-     * @ORM\OneToOne(targetEntity=Coupon::class, mappedBy="invoice", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Coupon::class, mappedBy="invoice", cascade={"remove"})
      */
     private $coupon;
 
