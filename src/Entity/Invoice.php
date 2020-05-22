@@ -223,18 +223,18 @@ class Invoice
     public function getChildrenBooks(): Collection
     {
         $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->eq('type', 0))
+            ->andWhere(Criteria::expr()->eq("type", 0))
         ;
-        return $this->books->matching($criteria);
+        return $this->getBooks()->matching($criteria);
     }
 
     /**
      * @return Discount
      */
-    public function getFivePercentDiscount()
+    public function getTenPercentDiscount()
     {
         $criteria = Criteria::create()
-            ->andWhere(Criteria::expr()->eq('percentage', 5))
+            ->andWhere(Criteria::expr()->eq('percentage', 10))
         ;
         return $this->discounts->matching($criteria)->first();
     }

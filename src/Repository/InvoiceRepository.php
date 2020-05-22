@@ -21,7 +21,7 @@ class InvoiceRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Invoice::class);
-        $this->min_books_five_percent_discount = 2;
+        $this->min_books_ten_percent_discount = 2;
     }
 
     public function fetchOrCreateActiveInvoice(): Invoice
@@ -69,7 +69,7 @@ class InvoiceRepository extends ServiceEntityRepository
         $em->persist($i);
         $em->flush($i);
 
-        $this->fivePercentDiscount($i);
+        $this->tenPercentDiscount($i);
         return $i;
     }
 
@@ -90,39 +90,43 @@ class InvoiceRepository extends ServiceEntityRepository
             $em->remove($i);
         } else {
             $em->persist($i);
+            $em->persist($book);
         }
         $em->flush();
 
-        $this->fivePercentDiscount($i);
+        $this->tenPercentDiscount($i);
         return $i;
     }
 
-    protected function fivePercentDiscount(Invoice $invoice)
+    protected function tenPercentDiscount(Invoice $invoice)
     {
         $em = $this->getEntityManager();
+        $em->refresh($invoice);
         // If child book category is greater than 5
+        $discount = $invoice->getTenPercentDiscount();
         $childBooks = $invoice->getChildrenBooks();
-        $discount = $invoice->getFivePercentDiscount();
+        dump($invoice);
+        dump($childBooks);
         if ($discount == false) {
-            if ($childBooks->count() >= $this->min_books_five_percent_discount) {
+            if ($childBooks->count() >= $this->min_books_ten_percent_discount) {
                 $discount = new Discount;
                 $discount->setName('10% discount from the Children books total');
                 $discount->setType(1);
                 $discount->setInvoice($invoice);
-                $discount->setPercentage(5);
+                $discount->setPercentage(10);
                 $invoice->getDiscounts()->add($discount);
                 $discountAmount = 0;
                 foreach($childBooks as $b) {
                     $discountAmount += $b->getPrice();
                 }
-                $discountAmount = $discountAmount * 0.05;
+                $discountAmount = $discountAmount * 0.10;
                 $discount->setAmount($discountAmount);
                 $em->persist($discount);
                 $em->persist($invoice);
                 $em->flush();
             }
         } else {
-            if ($childBooks->count() < $this->min_books_five_percent_discount) {
+            if ($childBooks->count() < $this->min_books_ten_percent_discount) {
                 $invoice->getDiscounts()->removeElement($discount);
                 $em->remove($discount);
                 $em->persist($invoice);
@@ -133,7 +137,7 @@ class InvoiceRepository extends ServiceEntityRepository
                 foreach($childBooks as $b) {
                     $discountAmount += $b->getPrice();
                 }
-                $discountAmount = $discountAmount * 0.05;
+                $discountAmount = $discountAmount * 0.10;
                 $discount->setAmount($discountAmount);
                 $em->persist($discount);
                 $em->flush();
