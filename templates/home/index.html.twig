@@ -40,10 +40,10 @@
                     </p>
                     <div>
                         <!-- TODO - Invoices are multiple in cardinality, should only check the active invoice for the following condition -->
-                        {% if book.invoices|last is empty %}
-                            <a data-url="{{ path('add_to_cart', { book: book.id }) }}" class="add-to-cart btn btn-primary" data-id="{{ book.id }}"><i class="fa fa-cart-plus"></i>Add to Cart</a>
-                        {% else %}
+                        {% if book.invoices|last is same as(invoice) %}
                             <a data-url="{{ path('remove_from_cart', { book: book.id }) }}" class="remove-from-cart btn btn-info" data-id="{{ book.id }}"><i class="fa fa-shopping-cart"></i>Remove from Cart</a>
+                        {% else %}
+                            <a data-url="{{ path('add_to_cart', { book: book.id }) }}" class="add-to-cart btn btn-primary" data-id="{{ book.id }}"><i class="fa fa-cart-plus"></i>Add to Cart</a>
                         {% endif %}
                     </div>
                 </article>

@@ -97,4 +97,24 @@ class InvoiceController extends AbstractController
 
         return new Response((string) $i->getId(), 200);
     }
+
+    /**
+     * @Route("/pay-invoice/{invoice}", name="pay_invoice", methods={"POST"})
+     */
+    public function payInvoice(Invoice $invoice, InvoiceRepository $inv)
+    {
+        $i = $inv->payInvoice($invoice);
+        return new Response($i->getId(), 200);
+    }
+
+    /**
+     * @Route("/remove-invoice/{invoice}", name="remove_invoice", methods={"POST"})
+     */
+    public function removeInvoice(Invoice $invoice)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($invoice);
+        $em->flush();
+        return new Response('', 200);
+    }
 }

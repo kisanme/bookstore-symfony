@@ -29,4 +29,32 @@ $(document).ready(function(){
         })
     })
 
+    /**
+     * Pay an invoice
+     */
+    $("#pay_invoice").on("click", e => {
+        $button = $(e.currentTarget)
+        $.ajax({
+            url: $button.data('url'),
+            method: 'POST',
+            success: (data, status) => {
+                alert('Paid Invoice Successfully!')
+                location.reload();
+            }
+        })
+    })
+
+    /**
+     * Reset an invoice
+     */
+    $("#reset_invoice").on("click", e => {
+        $button = $(e.currentTarget)
+        $.ajax({
+            url: $button.data('url'),
+            method: 'POST',
+            success: (data, status) => {
+                location.reload();
+            }
+        })
+    })
 })

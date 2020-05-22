@@ -60,9 +60,15 @@
                 </tfoot>
             </table>
         </div>
+
         {% if coupon is not defined or coupon is null %}
             {{ form(coupon_form, {'attr': {'class': 'coupon-form'}})}}
         {% endif %}
+
+        <div>
+            <button class="btn btn-success" id="pay_invoice" data-url="{{ path('pay_invoice', { invoice: invoice.id }) }}">Pay this Invoice</button>
+            <button class="btn btn-danger" id="reset_invoice" data-url="{{ path('remove_invoice', { invoice: invoice.id }) }}">Reset this Invoice</button>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -204,4 +204,15 @@ class InvoiceRepository extends ServiceEntityRepository
         $em->persist($invoice);
         $em->flush();
     }
+
+    public function payInvoice(Invoice $invoice): Invoice
+    {
+        $em = $this->getEntityManager();
+        $invoice->setPaymentDate(new DateTime);
+        $invoice->setPaymentStatus(true);
+        $em->persist($invoice);
+        $em->flush();
+
+        return $invoice;
+    }
 }
