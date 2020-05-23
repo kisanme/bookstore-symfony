@@ -16,6 +16,28 @@ Symfony based bookstore app for 99x assessment
 ## Setting up
 These instructions are for setting up the database and the project up and running on a local dev environment.
 
+### Making changes to the .env and .env.test files
+The following needs to be modified in the `.env` and `.env.test` files:
+* MySQL username (`mysql_user`)
+* MySQL password (`mysql_username`)
+* Name of the database (`db_name` and `db_name_test`) {optional, if you don't have databases named `bookstore` and `bookstore_test` already}
+Modify the entry which looks like:
+```
+# In .env file
+DATABASE_URL=mysql://root:kisan@127.0.0.1:3306/bookstore?serverVersion=5.7
+
+# In .env.test file
+DATABASE_URL=mysql://root:kisan@127.0.0.1:3306/bookstore_test?serverVersion=5.7
+
+# Replace with your credentials
+# In .env file
+DATABASE_URL=mysql://mysql_username:mysql_password@127.0.0.1:3306/db_name?serverVersion=5.7
+
+# In .env.test file
+DATABASE_URL=mysql://mysql_username:mysql_password@127.0.0.1:3306/db_name_test?serverVersion=5.7
+
+```
+
 ### Importing the Dev Database
 Importing the dev database. From the project root run:
 ```bash
