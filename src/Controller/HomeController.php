@@ -26,19 +26,20 @@ class HomeController extends AbstractController
     {
         $responseData = $r->initializeResponse();
         $categoryBy = $request->query->get('category');
+        $page = (int) $request->query->get('page');
 
         /**
          * When filtering is available
          */
         if ($categoryBy != NULL) {
             if ($categoryBy == 1 || $categoryBy == 0) {
-                $responseData['paginator'] = $bookRepository->byCategories((int) $categoryBy);
+                $responseData['paginator'] = $bookRepository->byCategories((int) $categoryBy, $page);
                 $responseData['category'] = $bookRepository->getCategory((int) $categoryBy);
             } else {
                 return $this->redirectToRoute('index');
             }
         } else {
-            $responseData['paginator'] = $bookRepository->findLatest();
+            $responseData['paginator'] = $bookRepository->findLatest($page);
         }
 
         return $this->render('home/index.html.twig', $responseData);
