@@ -6,9 +6,12 @@ Symfony based bookstore app for 99x assessment
 * PHP installed on the local machine (version 7.3+).
 * MySQL DBMS is installed on the machine.
 * Composer, Symfony binary, Node, npm and yarn are installed and configured with the path variables.
+* Git is already installed, configured and knowledge to donwload this repository exists.
 
 ### Application
 * User account system is not implemented as part of the solution. But the solution assumes that a user is already logged in (hard-coded user entry for invoice). This is made this way thinking that a user sub-system will arrive for the system.
+* The admin sub system is not implemented as part of the solution. But it is thought as a future improvement where you can create, delete and manage books; view the invoices and have reporting tools integrated to have useful reports.
+* Books are added into the database by default. For now new books are entered via the DBMS.
 
 ## Setting up
 These instructions are for setting up the database and the project up and running on a local dev environment.
