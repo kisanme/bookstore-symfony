@@ -14,7 +14,7 @@ Symfony based bookstore app for 99x assessment
 * Books are added into the database by default. For now new books are entered via the DBMS.
 
 ## Setting up
-These instructions are for setting up the database and the project up and running on a local dev environment.
+These instructions are for setting up the database and the project up and running on a local dev environment. Run these instructions in the given order.
 
 ### Making changes to the .env and .env.test files
 The following needs to be modified in the `.env` and `.env.test` files:
@@ -36,6 +36,12 @@ DATABASE_URL=mysql://mysql_username:mysql_password@127.0.0.1:3306/db_name?server
 # In .env.test file
 DATABASE_URL=mysql://mysql_username:mysql_password@127.0.0.1:3306/db_name_test?serverVersion=5.7
 
+```
+### Installing Dependencies
+First install php and js dependencies using the following commands
+```bash
+composer install
+yarn install
 ```
 
 ### Importing the Dev Database
@@ -59,13 +65,12 @@ Importing the testing database. From the project root run:
 ## Run the project
 From the project root run the following commands one after the other
 ```bash
-composer install
-yarn install && yarn build
+yarn build
 symfony serve
 ```
 
 ## Running tests
 From the project root run the following command to run both unit and integration tests
 ```bash
-php bin/phpunit
+./bin/phpunit
 ```
