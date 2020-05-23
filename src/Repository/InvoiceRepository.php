@@ -21,8 +21,8 @@ class InvoiceRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry, DiscountRepository $disRepo)
     {
         parent::__construct($registry, Invoice::class);
-        $this->min_books_ten_percent_discount = 2;
-        $this->min_books_five_percent_discount = 2;
+        $this->min_books_ten_percent_discount = 5;
+        $this->min_books_five_percent_discount = 10;
         $this->disRepo = $disRepo;
     }
 
