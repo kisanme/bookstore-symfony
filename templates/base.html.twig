@@ -23,7 +23,7 @@
                         </div>
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
-                                <li class="dropdown">
+                                <li class="dropdown top-cart">
                                     {% if invoice is defined and invoice is not null %}
                                         <a href="{{ path('invoice') }}" class="dropdown-toggle">
                                             <span>{{ invoice.NetTotal | format_currency('LKR', {decimal_always_shown: true }) }}</span>
